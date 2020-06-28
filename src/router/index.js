@@ -5,12 +5,27 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'index',
+    name: 'index', //主页
     component: () => import('../views/index')
   },
   {
+    path: '/login',
+    name: 'login', //登录页
+    component: () => import('../views/signIn/login')
+  },
+  {
+    path: '/register',
+    name: 'register', //注册页
+    component: () => import('../views/signIn/register')
+  },
+  {
+    path: '/forgetPassword',
+    name: 'forgetPassword', //忘记密码
+    component: () => import('../views/signIn/forgetPassword')
+  },
+  {
     path: '/home',
-    name: 'home',
+    name: 'home', //首页
     redirect: '/home/stars01',
     component: () => import('../views/home'),
     children: [

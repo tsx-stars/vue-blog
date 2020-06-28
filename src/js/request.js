@@ -40,14 +40,12 @@ service.interceptors.response.use(
       data,
       config: { config }
     } = response
-    const { code, msg } = data
+    const { resultCode, message } = data
     if (status !== 200) {
       !config.noTip && _this.$message.error(`接口${status}异常`)
       return Promise.reject(response)
-    } else if (code && code == '90006') {
-      return data
-    } else if (code && code != '100') {
-      !config.noTip && _this.$message.error(msg || '未知异常')
+    } else if (resultCode) {
+      !config.noTip && _this.$message.error(message || '未知异常')
       return Promise.reject(data)
     } else {
       return data

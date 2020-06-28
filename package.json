@@ -2,6 +2,8 @@
   "name": "vue-blokg",
   "version": "0.1.0",
   "private": true,
+  "author": "stars",
+  "contact": "whalefall0@163.com",
   "scripts": {
     "start": "npm run serve",
     "serve": "vue-cli-service serve",
@@ -38,7 +40,8 @@
   "eslintConfig": {
     "root": true,
     "env": {
-      "node": true
+      "node": true,
+      "jquery": true
     },
     "extends": [
       "plugin:vue/essential",
@@ -47,6 +50,12 @@
     ],
     "parserOptions": {
       "parser": "babel-eslint"
+    },
+    "rules": {
+      "no-console": "off",
+      "no-debugger": "off",
+      "no-unused-vars": [0, {"vars": "all", "args": "after-used"}],
+      "no-invalid-regexp": "off"
     }
   },
   "browserslist": [

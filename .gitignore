@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
-package-lock.json
 /dist
 
 # local env files
@@ -21,3 +20,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# my
+package-lock.json
+vue-blog
