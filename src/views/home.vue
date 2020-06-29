@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <sideBar style="min-width: 200px"></sideBar>
-    <router-view style="flex: 1;background: #42aa92" />
+    <router-view style="flex: 1;width: 70%;padding: 40px" />
   </div>
 </template>
 

@@ -27,8 +27,12 @@
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
-      <div style="display: flex;justify-content: space-between;align-items: center">
-        <p>没有账号？<a href="javascript:" @click="$jump('register')">去注册</a></p>
+      <div
+        style="display: flex;justify-content: space-between;align-items: center"
+      >
+        <p>
+          没有账号？<a href="javascript:" @click="$jump('register')">去注册</a>
+        </p>
         <a href="javascript:" @click="$jump('forgetPassword')">忘记密码</a>
       </div>
     </el-form>
