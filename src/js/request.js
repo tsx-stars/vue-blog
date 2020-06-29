@@ -40,12 +40,17 @@ service.interceptors.response.use(
       data,
       config: { config }
     } = response
-    const { resultCode, message } = data
     if (status !== 200) {
-      !config.noTip && _this.$message.error(`接口${status}异常`)
+      !config.noTip && _this?.$message.error(`接口${status}异常`)
       return Promise.reject(response)
-    } else if (resultCode) {
-      !config.noTip && _this.$message.error(message || '未知异常')
+    }
+    if (response.request.responseType === 'blob') {
+      download(response)
+      return
+    }
+    const { resultCode, message } = data
+    if (resultCode) {
+      !config.noTip && _this?.$message.error(message || '未知异常')
       return Promise.reject(data)
     } else {
       return data
@@ -66,12 +71,42 @@ service.interceptors.response.use(
     } else message.includes('Request failed with status code')
     message =
       '接口' + message.substr(message.length - 3) + '异常' + !config.noTip &&
-      _this.$message.error(message || '接口未知异常')
+      _this?.$message.error(message || '接口未知异常')
     return Promise.reject({
       error_info: message
     })
   }
 )
+
+// 下载文件
+function download(res) {
+  if (res.data.type !== 'application/json') {
+    if (!res.data.size) {
+      _this.$hMessage.error('文件不存在')
+      return
+    }
+    // let blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'})
+    let href = URL.createObjectURL(res.data)
+    let a = document.createElement('a')
+    a.href = href
+    let title = res.headers['content-disposition']
+    a.download = decodeURIComponent(title.split('=')[1])
+    // a.download = unescape(decodeURI((title).split('=')[1]))
+    a.click()
+    a = null
+    URL.revokeObjectURL(href)
+  } else {
+    let reader = new FileReader()
+    /*reader.addEventListener("loadend", function() {
+            console.log(JSON.parse(reader.result));
+        });*/
+    reader.onload = e => {
+      let data = JSON.parse(e.target.result)
+      _this.$hMessage.error(data.message)
+    }
+    reader.readAsText(res.data, ['utf-8'])
+  }
+}
 
 //请求方法
 export default function(
