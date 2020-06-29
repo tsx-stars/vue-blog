@@ -74,14 +74,24 @@ service.interceptors.response.use(
 )
 
 //请求方法
-export default function(url, method, params, config = {}) {
+export default function(
+  url,
+  method,
+  params,
+  {
+    tip = true, //错误弹提示
+    Authorization = true, //带请求头
+    ...config
+  } = {}
+) {
   let data = method.toLocaleLowerCase() === 'get' ? 'params' : 'data'
   return service({
     method,
     url,
     [data]: params,
-    config,
-    withCredentials: config.formDate
+    responseType: config.responseType,
+    withCredentials: config.withCredentials || config.formDate,
+    config: { tip, Authorization, ...config }
   })
     .then(res => {
       return Promise.resolve(res)
