@@ -43,7 +43,6 @@
       "node": true,
       "jquery": true
     },
-    "eslintignore": ["test"],
     "extends": [
       "plugin:vue/essential",
       "eslint:recommended",

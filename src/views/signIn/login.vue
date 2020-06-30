@@ -59,7 +59,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$xhr('', 'post', this.form).then(res => {
+          this.$xhr('user/login', 'post', this.form).then(res => {
             this.$message.success(res.msg || '登录成功')
             this.$jump('home')
           })

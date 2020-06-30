@@ -37,8 +37,8 @@
           @click.prevent="get_verify_code"
           style="width: 110px"
           type="primary"
-          >{{ verify_text }}</el-button
-        >
+          >{{ verify_text }}
+        </el-button>
       </el-form-item>
       <el-form-item label="性别" prop="sex" required>
         <el-radio-group v-model="form.sex">
@@ -76,6 +76,36 @@
 export default {
   name: 'register',
   data() {
+    let validate_account = (rule, value, callback) => {
+      this.$xhr(
+        'user/isexist',
+        'post',
+        { account: this.form.account },
+        { tip: false }
+      )
+        .then(res => {})
+        .then(() => {
+          callback()
+        })
+        .catch(() => {
+          callback(new Error('账号已存在'))
+        })
+    }
+    let validate_email = (rule, value, callback) => {
+      this.$xhr(
+        'user/isexist',
+        'post',
+        { email: this.form.email },
+        { tip: false }
+      )
+        .then(res => {})
+        .then(() => {
+          callback()
+        })
+        .catch(() => {
+          callback(new Error('邮箱已存在'))
+        })
+    }
     let validate_age = (rule, value, callback) => {
       if (value && !Number.isInteger(value)) {
         callback(new Error('请输入数字值'))
@@ -108,12 +138,12 @@ export default {
         contact_content: '' //联系内容
       },
       rules: {
-        account: [{ min: 3, trigger: 'blur' }],
+        account: [{ min: 3, validator: validate_account, trigger: 'blur' }],
         password: [{ min: 6, trigger: 'blur' }],
         confirm_password: [
           { validator: validate_confirm_password, trigger: 'blur' }
         ],
-        email: [{ type: 'email', trigger: 'blur' }],
+        email: [{ type: 'email', validator: validate_email, trigger: 'blur' }],
         verify_code: [{ min: 4, max: 6, trigger: 'blur' }],
         age: [{ validator: validate_age, trigger: 'blur' }]
         // contact_content: [{ required: true, trigger: 'blur' }]
@@ -140,16 +170,19 @@ export default {
     get_verify_code() {
       if (this.verify_text !== '获取验证码') return
       let count = 10
-      this.$xhr('fsyzm', 'post', { email: this.form.email }).then(res => {
-        let time = setInterval(() => {
-          if (this.verify_text <= 0) {
-            this.verify_text = '获取验证码'
-            clearInterval(time)
-          } else {
-            this.verify_text = count--
-          }
-        }, 1000)
-      })
+      this.$xhr('user/sendEmailCode', 'post', { email: this.form.email }).then(
+        res => {
+          this.$message.success('发送成功！')
+          let time = setInterval(() => {
+            if (this.verify_text <= 0) {
+              this.verify_text = '获取验证码'
+              clearInterval(time)
+            } else {
+              this.verify_text = count--
+            }
+          }, 1000)
+        }
+      )
     },
     //提交
     submitForm(formName) {

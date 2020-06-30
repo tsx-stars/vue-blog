@@ -41,7 +41,7 @@ service.interceptors.response.use(
       config: { config }
     } = response
     if (status !== 200) {
-      !config.noTip && _this?.$message.error(`接口${status}异常`)
+      config.tip && _this?.$message.error(`接口${status}异常`)
       return Promise.reject(response)
     }
     if (response.request.responseType === 'blob') {
@@ -50,7 +50,7 @@ service.interceptors.response.use(
     }
     const { resultCode, message } = data
     if (resultCode) {
-      !config.noTip && _this?.$message.error(message || '未知异常')
+      config.tip && _this?.$message.error(message || '未知异常')
       return Promise.reject(data)
     } else {
       return data
@@ -70,7 +70,7 @@ service.interceptors.response.use(
       router.push('/login')
     } else message.includes('Request failed with status code')
     message =
-      '接口' + message.substr(message.length - 3) + '异常' + !config.noTip &&
+      '接口' + message.substr(message.length - 3) + '异常' + config.tip &&
       _this?.$message.error(message || '接口未知异常')
     return Promise.reject({
       error_info: message
