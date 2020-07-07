@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form
-      style="width: 400px; margin: 200px auto 0;"
+      style="width: 400px;margin: 200px auto 0"
       :model="form"
       status-icon
       :rules="rules"
@@ -63,7 +63,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$xhr('', 'post', this.form).then((res) => {
+          this.$xhr('user/login', 'post', this.form).then((res) => {
             this.$message.success(res.message || '登录成功')
             this.$jump('home')
           })
