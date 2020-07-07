@@ -1,6 +1,15 @@
+const path = require('path')
+function mockServer() {
+  if (process.env.NODE_ENV === 'development') {
+    return require('./mock/mockServer.js')
+  } else {
+    return ''
+  }
+}
+
 module.exports = {
   lintOnSave: false,
-  outputDir: 'vue-blog',
+  assetsDir: 'static',
   devServer: {
     port: 9999, // 启动端口
     open: true, // 启动后是否自动打开网页
@@ -11,9 +20,28 @@ module.exports = {
         // secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true, //是否跨域
         pathRewrite: {
-          '^/dev': ''
-        }
-      }
+          '^/dev': '',
+        },
+      },
+    },
+    after: mockServer(),
+  },
+  configureWebpack() {
+    return {
+      resolve: {
+        alias: {
+          '@': path.join(__dirname, 'src'),
+          '^': path.join(__dirname, 'src/components'),
+        },
+      },
     }
-  }
+  },
+  css: {
+    requireModuleExtension: true,
+    loaderOptions: {
+      scss: {
+        prependData: '@import "~@/styles/common.scss";',
+      },
+    },
+  },
 }

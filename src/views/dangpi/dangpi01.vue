@@ -7,7 +7,7 @@ export default {
   name: 'dangpi01',
   data() {
     return {}
-  }
+  },
 }
 </script>
 

@@ -35,7 +35,7 @@
       :total="total"
       :page-size="form.pageSize"
       @current-change="currentChange"
-      style="float: right;margin-top: 20px"
+      style="float: right; margin-top: 20px;"
     >
     </el-pagination>
   </div>
@@ -58,9 +58,9 @@ export default {
         contact_type: '', //联系类型
         contact_content: '', //联系内容
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
       },
-      tableData: []
+      tableData: [],
     }
   },
   created() {
@@ -71,7 +71,7 @@ export default {
       this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
           console.log(1)
@@ -84,9 +84,9 @@ export default {
       this.getUserList()
     },
     getUserList() {
-      this.$xhr('user/userList', 'post', this.form).then(res => {
+      this.$xhr('user/userList', 'post', this.form).then((res) => {
         this.total = res.data.total
-        this.tableData = res.data.list.map(item => {
+        this.tableData = res.data.list.map((item) => {
           return {
             ...item,
             sex: item.sex == 0 ? '女' : '男',
@@ -95,18 +95,18 @@ export default {
                 ? '微信'
                 : item.contact_type == 1
                 ? 'QQ'
-                : '手机号'
+                : '手机号',
           }
         })
       })
     },
     delUser(data) {
-      this.$xhr('user/deleteUser', 'post', { id: data.id }).then(res => {
+      this.$xhr('user/deleteUser', 'post', { id: data.id }).then((res) => {
         this.$message.success(res.message)
         this.getUserList()
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

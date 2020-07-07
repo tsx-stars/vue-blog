@@ -7,7 +7,7 @@ export default {
   name: 'side03',
   data() {
     return {}
-  }
+  },
 }
 </script>
 

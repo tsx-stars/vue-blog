@@ -7,7 +7,7 @@ export default {
   name: 'stars02',
   data() {
     return {}
-  }
+  },
 }
 </script>
 

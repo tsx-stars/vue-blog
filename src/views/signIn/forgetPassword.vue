@@ -7,7 +7,7 @@ export default {
   name: 'forgetPassword',
   data() {
     return {}
-  }
+  },
 }
 </script>
 

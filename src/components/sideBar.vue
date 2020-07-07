@@ -6,7 +6,7 @@
     @select="handleSelect"
     @close="handleClose"
   >
-    <el-button style="margin-left: 30px" @click="$jump('index')"
+    <el-button style="margin-left: 30px;" @click="$jump('index')"
       >回主页</el-button
     >
     <el-submenu index="1">
@@ -58,7 +58,7 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath)
-    }
-  }
+    },
+  },
 }
 </script>

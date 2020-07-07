@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form
-      style="width: 400px;margin: 200px auto 0"
+      style="width: 400px; margin: 200px auto 0;"
       :model="form"
       status-icon
       :rules="rules"
@@ -28,7 +28,11 @@
         <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
       <div
-        style="display: flex;justify-content: space-between;align-items: center"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
       >
         <p>
           没有账号？<a href="javascript:" @click="$jump('register')">去注册</a>
@@ -46,20 +50,20 @@ export default {
     return {
       form: {
         account: '', //用户名
-        password: '' //密码，
+        password: '', //密码，
       },
       rules: {
         account: [{ min: 3, trigger: 'blur' }],
-        password: [{ min: 6, trigger: 'blur' }]
-      }
+        password: [{ min: 6, trigger: 'blur' }],
+      },
     }
   },
   methods: {
     //提交
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$xhr('', 'post', this.form).then(res => {
+          this.$xhr('', 'post', this.form).then((res) => {
             this.$message.success(res.message || '登录成功')
             this.$jump('home')
           })
@@ -69,8 +73,8 @@ export default {
     //重置
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    }
-  }
+    },
+  },
 }
 </script>
 
