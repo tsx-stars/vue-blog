@@ -10,7 +10,7 @@ process.env.VUE_APP_AUTHOR = author
 process.env.VUE_APP_EMAIL = email
 
 function mockServer() {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === 'development' || true) {
     return require('./mock/mockServer.js')
   } else {
     return ''
@@ -76,7 +76,7 @@ module.exports = {
     requireModuleExtension: true,
     loaderOptions: {
       scss: {
-        prependData: '@import "~@/styles/common.scss";',
+        additionalData: '@import "~@/styles/variables.scss";',
       },
     },
   },

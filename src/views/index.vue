@@ -15,16 +15,18 @@ export default {
     return {}
   },
   mounted() {
-    axios.post('/vab-mock-server/register').then(res=>{
-      alert('注册成功')
-    })
+    console.log('进入index')
+    axios
+      .post('/vab-mock-server/register')
+      .then((res) => {
+        console.log(res);
+        console.log('注册成功')
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log('注册失败')
+      })
     this.$message.success('进入home页')
-    /*this.$xhr('/ad/getList','get',{name:'get'}).then((res) => {
-      console.log(res)
-    })
-    this.$xhr('/t2','post',{name:'张三'}).then((res) => {
-      console.log(res)
-    })*/
   },
 }
 </script>

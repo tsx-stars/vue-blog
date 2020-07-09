@@ -14,6 +14,7 @@ window.app = {
   author: process.env.VUE_APP_AUTHOR,
   email: process.env.VUE_APP_EMAIL,
 }
+import './styles/common.scss'
 
 //引入饿了么组件
 import ElementUI from 'element-ui'

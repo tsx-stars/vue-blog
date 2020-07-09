@@ -1,4 +1,8 @@
 
+###/ad/getList###POST http://localhost:9999/vab-mock-server/ad/getList
+Content-Type: application/x-www-form-urlencoded
+###
+
 ###/menu/navigate###POST http://localhost:9999/vab-mock-server/menu/navigate
 Content-Type: application/x-www-form-urlencoded
 ###
@@ -7,7 +11,11 @@ Content-Type: application/x-www-form-urlencoded
 Content-Type: application/x-www-form-urlencoded
 ###
 
-###/ad/getList###POST http://localhost:9999/vab-mock-server/ad/getList
+###/register###POST http://localhost:9999/vab-mock-server/register
+Content-Type: application/x-www-form-urlencoded
+###
+
+###/logout###POST http://localhost:9999/vab-mock-server/logout
 Content-Type: application/x-www-form-urlencoded
 ###
 
@@ -16,13 +24,5 @@ Content-Type: application/x-www-form-urlencoded
 ###
 
 ###/user/info###POST http://localhost:9999/vab-mock-server/user/info
-Content-Type: application/x-www-form-urlencoded
-###
-
-###/register###POST http://localhost:9999/vab-mock-server/register
-Content-Type: application/x-www-form-urlencoded
-###
-
-###/logout###POST http://localhost:9999/vab-mock-server/logout
 Content-Type: application/x-www-form-urlencoded
 ###

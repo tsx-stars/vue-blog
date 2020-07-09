@@ -10,15 +10,25 @@
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
 <!--  <title><%= htmlWebpackPlugin.options.title %></title>-->
   <title>stars的个人博客</title>
-  <script src="./static/config.js?v=<%= new Date().getTime() %>"></script>
-  <script src="./static/jquery.min.js?v=<%= new Date().getTime() %>"></script>
-  <link rel="stylesheet" href="./static/animate.min.css?v=<%= new Date().getTime() %>">
+  <link rel="stylesheet" href="./static/css/loading.css?v=<%= new Date().getTime() %>">
+  <link rel="stylesheet" href="./static/css/animate.min.css">
+  <script src="./config.js?v=<%= new Date().getTime() %>"></script>
+  <script src="./static/js/jquery.min.js"></script>
 </head>
 <body>
 <noscript>
   <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.If you have any questions, please contact stars,email:whalefall0@163.com</strong>
 </noscript>
-<div id="app"></div>
+<div id="app">
+  <div id="vue-admin-beautiful">
+    <div class="first-loading-wrp">
+      <div class="loading-wrp">
+        <span class="dot dot-spin"><i></i><i></i><i></i><i></i></span>
+      </div>
+      <h1><%= VUE_APP_NAME %></h1>
+    </div>
+  </div>
+</div>
 <!-- built files will be auto injected -->
 </body>
 </html>
