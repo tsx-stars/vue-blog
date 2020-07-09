@@ -1,4 +1,14 @@
 const path = require('path')
+const CompressionWebpackPlugin = require('compression-webpack-plugin') //gzip压缩
+
+const { name, version, author, email } = require('./package.json')
+const moment = require('moment')
+process.env.VUE_APP_NAME = name
+process.env.VUE_APP_VERSION = version
+process.env.VUE_APP_UPDATE_TIME = moment().format('YYYY/MM/DD HH:mm:ss')
+process.env.VUE_APP_AUTHOR = author
+process.env.VUE_APP_EMAIL = email
+
 function mockServer() {
   if (process.env.NODE_ENV === 'development') {
     return require('./mock/mockServer.js')
@@ -35,6 +45,32 @@ module.exports = {
         },
       },
     }
+  },
+  chainWebpack(config) {
+    // 压缩代码
+    config.optimization.minimize(true)
+    // 分割代码
+    config.optimization.splitChunks({
+      chunks: 'all',
+    })
+    //gzip压缩
+    config
+      .plugin('compression')
+      .use(CompressionWebpackPlugin, [
+        {
+          filename: '[path].gz[query]',
+          algorithm: 'gzip',
+          test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
+          threshold: 1024,
+          deleteOriginalAssets: false, // 删除源文件
+          minRatio: 0.8,
+        },
+      ])
+      .end()
+    config.when(process.env.NODE_ENV === 'production', (config) => {
+      config.performance.set('hints', false)
+      config.devtool('none')
+    })
   },
   css: {
     requireModuleExtension: true,

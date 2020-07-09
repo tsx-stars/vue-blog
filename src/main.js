@@ -7,6 +7,14 @@ import xhr from './utils/request'
 Vue.config.productionTip = false
 Vue.config.devtools = true
 
+window.app = {
+  name: process.env.VUE_APP_NAME,
+  version: process.env.VUE_APP_VERSION,
+  update_time: process.env.VUE_APP_UPDATE_TIME,
+  author: process.env.VUE_APP_AUTHOR,
+  email: process.env.VUE_APP_EMAIL,
+}
+
 //引入饿了么组件
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
