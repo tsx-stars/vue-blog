@@ -28,6 +28,8 @@ export default {
       })
     this.$message.success('进入home页')
   },
+  methods:{
+  }
 }
 </script>
 

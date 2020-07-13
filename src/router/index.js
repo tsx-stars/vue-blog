@@ -9,6 +9,26 @@ const routes = [
     component: () => import('../views/index'),
   },
   {
+    path: '/test',
+    name: 'test', //测试页
+    component: () => import('../views/test'),
+  },
+  {
+    path: '/demo',
+    name: 'demo', //demo页
+    component: () => import('../views/demo'),
+  },
+  {
+    path: '/drag-select',
+    name: 'drag-select', //拖拽select
+    component: () => import('../views/drag-select.vue'),
+  },
+  /*{
+    path: '/dnd-list',
+    name: 'dnd-list', //拖拽列表
+    component: () => import('../views/dnd-list'),
+  },*/
+  {
     path: '/login',
     name: 'login', //登录页
     component: () => import('../views/signIn/login'),

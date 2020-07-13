@@ -1,6 +1,9 @@
 const path = require('path')
 const CompressionWebpackPlugin = require('compression-webpack-plugin') //gzip压缩
 
+const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin') //查看打包时间
+const smp = new SpeedMeasureWebpackPlugin()
+
 const { name, version, author, email } = require('./package.json')
 const moment = require('moment')
 process.env.VUE_APP_NAME = name
@@ -37,13 +40,18 @@ module.exports = {
     after: mockServer(),
   },
   configureWebpack() {
-    return {
+    let config = {
       resolve: {
         alias: {
           '@': path.join(__dirname, 'src'),
           '^': path.join(__dirname, 'src/components'),
         },
       },
+    }
+    if (process.env.NODE_ENV === 'production') {
+      return smp.wrap(config)
+    } else {
+      return config
     }
   },
   chainWebpack(config) {

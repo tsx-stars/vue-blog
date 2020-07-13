@@ -23,6 +23,8 @@ Vue.use(ElementUI)
 
 // require('./mock/index')
 
+
+
 //路由跳转
 Vue.prototype.$jump = (name, query) => {
   router.push({

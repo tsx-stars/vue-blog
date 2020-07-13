@@ -2,9 +2,9 @@ export {
   formatDate, //日期格式转换
   deepCopy, //深度克隆
   paramObj, //将url请求参数转为json格式
+  exportCsv, //前端根据二维数组导出csv表格
 }
 
-//日期格式转换
 function formatDate(date, fmt = 'yyyy-MM-dd') {
   if (!date) {
     return date
@@ -38,7 +38,6 @@ function formatDate(date, fmt = 'yyyy-MM-dd') {
   return fmt
 }
 
-//深度克隆
 function deepCopy(obj, cache = []) {
   if (obj === null || typeof obj !== 'object') {
     return obj
@@ -58,19 +57,29 @@ function deepCopy(obj, cache = []) {
   return copy
 }
 
-//将url请求参数转为json格式
-export function paramObj(url) {
-  const search = url.split("?")[1];
+function paramObj(url) {
+  const search = url.split('?')[1]
   if (!search) {
-    return {};
+    return {}
   }
   return JSON.parse(
-      '{"' +
+    '{"' +
       decodeURIComponent(search)
-          .replace(/"/g, '\\"')
-          .replace(/&/g, '","')
-          .replace(/=/g, '":"')
-          .replace(/\+/g, " ") +
+        .replace(/"/g, '\\"')
+        .replace(/&/g, '","')
+        .replace(/=/g, '":"')
+        .replace(/\+/g, ' ') +
       '"}'
-  );
+  )
+}
+
+function exportCsv(arr) {
+  let csvContent =
+    'data:text/csv;charset=utf-8,' + arr.map((e) => e.join(',')).join('\n')
+  let encodedUri = encodeURI(csvContent)
+  let link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', 'my_data.csv')
+  link.click()
+  link = null
 }
