@@ -13,7 +13,7 @@ process.env.VUE_APP_AUTHOR = author
 process.env.VUE_APP_EMAIL = email
 
 function mockServer() {
-  if (process.env.NODE_ENV === 'development' || true) {
+  if (process.env.NODE_ENV === 'development') {
     return require('./mock/mockServer.js')
   } else {
     return ''
@@ -23,6 +23,9 @@ function mockServer() {
 module.exports = {
   lintOnSave: false,
   assetsDir: 'static',
+  outputDir: 'vue-blog',
+  publicPath: '/vue-blog/',
+  // process.env.NODE_ENV === 'production' ? '/vue-blog/' : '/',
   devServer: {
     port: 9999, // 启动端口
     open: true, // 启动后是否自动打开网页
@@ -55,29 +58,30 @@ module.exports = {
     }
   },
   chainWebpack(config) {
-    // 压缩代码
-    config.optimization.minimize(true)
-    // 分割代码
-    config.optimization.splitChunks({
-      chunks: 'all',
-    })
-    //gzip压缩
-    config
-      .plugin('compression')
-      .use(CompressionWebpackPlugin, [
-        {
-          filename: '[path].gz[query]',
-          algorithm: 'gzip',
-          test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
-          threshold: 1024,
-          deleteOriginalAssets: false, // 删除源文件
-          minRatio: 0.8,
-        },
-      ])
-      .end()
     config.when(process.env.NODE_ENV === 'production', (config) => {
       config.performance.set('hints', false)
+      //去map
       config.devtool('none')
+      // 压缩代码
+      config.optimization.minimize(true)
+      // 分割代码
+      config.optimization.splitChunks({
+        chunks: 'all',
+      })
+      //gzip压缩
+      config
+        .plugin('compression')
+        .use(CompressionWebpackPlugin, [
+          {
+            filename: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
+            threshold: 1024,
+            deleteOriginalAssets: false, // 删除源文件
+            minRatio: 0.8,
+          },
+        ])
+        .end()
     })
   },
   css: {

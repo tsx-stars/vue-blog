@@ -23,11 +23,11 @@ const routes = [
     name: 'drag-select', //拖拽select
     component: () => import('../views/drag-select.vue'),
   },
-  /*{
+  {
     path: '/dnd-list',
     name: 'dnd-list', //拖拽列表
     component: () => import('../views/dnd-list'),
-  },*/
+  },
   {
     path: '/login',
     name: 'login', //登录页

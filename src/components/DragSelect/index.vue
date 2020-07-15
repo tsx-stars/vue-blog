@@ -38,12 +38,9 @@ export default {
       let item = this.$refs.dragSelect.$el.querySelectorAll(
         '.el-select__tags > span>span'
       )
-      console.log(item)
       item.forEach((item, index) => {
-        let text=item.innerText
-        console.log(text)
-        console.log(item)
-        item.setAttribute('title',text)
+        let text = item.innerText
+        item.setAttribute('title', text)
       })
     })
   },
@@ -55,16 +52,12 @@ export default {
       this.sortable = Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
         setData: function (dataTransfer) {
-          console.log(dataTransfer)
           dataTransfer.setData('Text', '')
           // to avoid Firefox bug
           // Detail see : https://github.com/RubaXa/Sortable/issues/1012
         },
         onEnd: (evt) => {
-          console.log(evt)
-          console.log(evt.oldIndex)
           const targetRow = this.value.splice(evt.oldIndex, 1)[0]
-          console.log(targetRow)
           this.value.splice(evt.newIndex, 0, targetRow)
         },
       })

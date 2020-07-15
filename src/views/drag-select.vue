@@ -1,22 +1,28 @@
 <template>
-  <div class="components-container" style="margin: 100px auto; width: 500px;">
-    <el-drag-select
-      class="el-drag-select"
-      v-model="value"
-      style="width: 500px;"
-      multiple
-      placeholder="请选择"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-    </el-drag-select>
-
-    <div style="margin-top: 30px;">
-      <el-tag v-for="item of value" :key="item" style="margin-right: 15px;">
+  <div class="components-container">
+    <div style="margin: 100px auto 0; width: 500px;">
+      <el-drag-select
+        class="el-drag-select"
+        v-model="value"
+        style="width: 500px;"
+        multiple
+        placeholder="请选择"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-drag-select>
+    </div>
+    <div style="margin: 10px 0 0 20px;">
+      <h4 style="margin-bottom: 10px;">当前顺序</h4>
+      <el-tag
+        v-for="item of value"
+        :key="item"
+        style="margin-right: 15px; margin-bottom: 10px;"
+      >
         {{ item }}
       </el-tag>
     </div>
@@ -25,73 +31,35 @@
 
 <script>
 import ElDragSelect from '@/components/DragSelect' // base on element-ui
-
+import axios from 'axios'
+import Mock from 'mockjs'
 export default {
   name: 'DragSelectDemo',
   components: { ElDragSelect },
   data() {
     return {
-      value: ['Apple', 'Banana', 'Orange'],
-      options: [
+      value: [],
+      options: [],
+    }
+  },
+  mounted() {
+    let options = Mock.mock({
+      // 20条数据
+      'data|20': [
         {
-          value: 'Apple',
-          label: 'Apple',
-        },
-        {
-          value: 'Banana',
-          label: 'Banana',
-        },
-        {
-          value: 'Orange',
-          label: 'Orange',
-        },
-        {
-          value: 'Pear',
-          label: 'Pear',
-        },
-        {
-          value: 'Strawberry',
-          label: 'Strawberry',
-        },
-        {
-          value: 'important',
-          label: 'important',
-        },
-        {
-          value: 'l-drag-selec',
-          label: 'l-drag-selec',
-        },
-        {
-          value: '-select__tag',
-          label: '-select__tag',
+          value: '@ctitle',
+          label: '@ctitle',
         },
       ],
-    }
+    }).data
+    console.log(options, '==')
+
+    this.$xhr('/dev/drag-select', 'post').then((res) => {
+      console.log(res.data)
+      this.options = res.data
+      this.value = this.options.slice(0, 3).map((item) => item.value)
+    })
   },
 }
 </script>
-<style lang="scss" scoped>
-/*.el-drag-select ::v-deep .el-select__tags-text {
-  display: inline-block !important;
-  width: 60px !important;
-  vertical-align: bottom;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}*/
-</style>
-<style>
-.el-select__tags {
-  overflow: auto !important;
-}
-.el-select__tags > span {
-  display: block!important;
-  width: 2000px !important;
-  max-width: 2000px !important;
-  height: 30px;
-  overflow: auto;
-}
-.el-select__tags > span > span {
-  display: inline !important;
-}
-</style>
+<style lang="scss" scoped></style>

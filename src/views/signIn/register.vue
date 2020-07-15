@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <el-form
-      style="width: 400px;margin: 200px auto 0"
+      style="width: 400px; margin: 200px auto 0;"
       :model="form"
       status-icon
       :rules="rules"

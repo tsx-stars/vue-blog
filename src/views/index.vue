@@ -15,21 +15,16 @@ export default {
     return {}
   },
   mounted() {
-    console.log('进入index')
     axios
       .post('/vab-mock-server/register')
       .then((res) => {
-        console.log(res);
         console.log('注册成功')
       })
       .catch((err) => {
-        console.log(err);
         console.log('注册失败')
       })
-    this.$message.success('进入home页')
   },
-  methods:{
-  }
+  methods: {},
 }
 </script>
 

@@ -1,25 +1,26 @@
 <template>
   <div class="components-container">
-    <aside>drag-list base on
-      <a href="https://github.com/SortableJS/Vue.Draggable" target="_blank">Vue.Draggable</a>
-    </aside>
-    <div class="editor-container">
-      <dnd-list :list1="list1" :list2="list2" list1-title="List" list2-title="Article pool" />
+    <div style="margin: 50px auto 0; width: 800px;" class="editor-container">
+      <dnd-list
+        :list1="list1"
+        :list2="list2"
+        list1-title="List"
+        list2-title="Article pool"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import DndList from '@/components/DndList'
-import { fetchList } from '@/api/article'
-
+import axios from 'axios'
 export default {
   name: 'DndListDemo',
   components: { DndList },
   data() {
     return {
       list1: [],
-      list2: []
+      list2: [],
     }
   },
   created() {
@@ -28,12 +29,18 @@ export default {
   methods: {
     getData() {
       this.listLoading = true
-      fetchList().then(response => {
-        this.list1 = response.data.items.splice(0, 5)
-        this.list2 = response.data.items
+      this.$xhr('/dev/dnd-list', 'post').then((res) => {
+        console.log(res)
+        this.list1 = res.data.splice(0, 5)
+        this.list2 = res.data
       })
-    }
-  }
+      /*axios.post('/dev/dnd-list').then((res) => {
+        console.log(res)
+        let data = res.body
+        this.list1 = data.items.splice(0, 5)
+        this.list2 = data.items
+      })*/
+    },
+  },
 }
 </script>
-
