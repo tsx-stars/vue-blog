@@ -1,8 +1,15 @@
 import axios from 'axios'
-import Vue from 'vue'
 import qs from 'qs'
-import router from '../router'
-let _this = new Vue()
+import router from '@/router'
+import { Message } from 'element-ui'
+//字段枚举
+let fieldEnum = {
+  token: 'token',
+  code: 'resultCode',
+  statusCode: '0',
+  msg: 'message',
+}
+
 window.baseURL =
   process.env.NODE_ENV === 'development'
     ? '/dev'
@@ -12,14 +19,14 @@ window.baseURL =
 const service = axios.create({
   baseURL: window.baseURL,
   timeout:
-    process.env.NODE_ENV == 'development' ? 60000 : window.timeout || 10000,
+    process.env.NODE_ENV === 'development' ? 60000 : window.timeout || 10000,
 })
 
 //请求拦截器
 service.interceptors.request.use(
   (request) => {
-    request.headers['Authorization'] = localStorage.getItem('userToken')
-    if (request.config.formDate) {
+    request.headers[fieldEnum.token] = sessionStorage.getItem('token')
+    if (request.formDate) {
       request.headers[
         'Content-Type'
       ] = `application/x-www-form-urlencoded;charset=UTF-8`
@@ -35,22 +42,18 @@ service.interceptors.request.use(
 //响应拦截器
 service.interceptors.response.use(
   (response) => {
-    let {
-      status,
-      data,
-      config: { config },
-    } = response
+    let { status, data, tips } = response
     if (status !== 200) {
-      !config.noTip && _this?.$message.error(`接口${status}异常`)
+      tips && Message.error(`接口${status}异常`)
       return Promise.reject(response)
     }
     if (response.request.responseType === 'blob') {
       download(response)
       return
     }
-    const { resultCode, message } = data
-    if (resultCode) {
-      !config.noTip && _this?.$message.error(message || '未知异常')
+    const { [fieldEnum.code]: code, [fieldEnum.msg]: msg } = data
+    if (code && code != fieldEnum.statusCode) {
+      tips && Message.error(msg || '未知异常')
       return Promise.reject(data)
     } else {
       return data
@@ -58,23 +61,20 @@ service.interceptors.response.use(
   },
   (error) => {
     /*网络连接过程异常处理*/
-    let {
-      message,
-      config: { config },
-    } = error
-    console.log(message)
-    if (message == 'Network Error') message = '网络错误'
-    if (message.includes('timeout')) message = '接口请求超时'
+    let { message, tips } = error
     if (message.includes('401')) {
       message = '登录信息失效，请重新登录！'
-      router.push('/login')
-    } else message.includes('Request failed with status code')
-    message =
-      '接口' + message.substr(message.length - 3) + '异常' + !config.noTip &&
-      _this?.$message.error(message || '接口未知异常')
-    return Promise.reject({
-      error_info: message,
-    })
+      sessionStorage.clear()
+      router.replace({
+        path: '/login',
+      })
+    }
+    if (message === 'Network Error') message = '网络错误'
+    if (message.includes('timeout')) message = '接口请求超时'
+    if (message.includes('Request failed with status code'))
+      message = '接口' + message.substr(message.length - 3) + '异常'
+    tips && Message.error(message || '接口未知异常')
+    return Promise.reject(error)
   }
 )
 
@@ -82,7 +82,7 @@ service.interceptors.response.use(
 function download(res) {
   if (res.data.type !== 'application/json') {
     if (!res.data.size) {
-      _this.$hMessage.error('文件不存在')
+      Message.error('文件不存在')
       return
     }
     // let blob = new Blob([res.data], {type: 'application/vnd.ms-excel;charset=utf-8'})
@@ -91,18 +91,14 @@ function download(res) {
     a.href = href
     let title = res.headers['content-disposition']
     a.download = decodeURIComponent(title.split('=')[1])
-    // a.download = unescape(decodeURI((title).split('=')[1]))
     a.click()
     a = null
     URL.revokeObjectURL(href)
   } else {
     let reader = new FileReader()
-    /*reader.addEventListener("loadend", function() {
-            console.log(JSON.parse(reader.result));
-        });*/
     reader.onload = (e) => {
       let data = JSON.parse(e.target.result)
-      _this.$hMessage.error(data.message)
+      Message.error(data[fieldEnum.msg] || '未知异常')
     }
     reader.readAsText(res.data, ['utf-8'])
   }
@@ -114,9 +110,9 @@ export default function (
   method,
   params,
   {
-    tip = true, //错误弹提示
-    Authorization = true, //带请求头
-    ...config
+    tips = true, //错误弹提示
+    token = true, //带请求头
+    ...config // formDate 表单提交, withCredentials Cookies
   } = {}
 ) {
   let data = method.toLocaleLowerCase() === 'get' ? 'params' : 'data'
@@ -124,14 +120,8 @@ export default function (
     method,
     url,
     [data]: params,
-    responseType: config.responseType,
-    withCredentials: config.withCredentials || config.formDate,
-    config: { tip, Authorization, ...config },
+    tips,
+    token,
+    ...config,
   })
-    .then((res) => {
-      return Promise.resolve(res)
-    })
-    .catch((err) => {
-      return Promise.reject(err)
-    })
 }

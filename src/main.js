@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import xhr from './utils/request'
+import './icons'
 
 Vue.config.productionTip = false
 Vue.config.devtools = true
