@@ -1,24 +1,14 @@
 const path = require('path')
+const settings = require('./src/settings.js')
+const { publicPath } = settings
 const CompressionWebpackPlugin = require('compression-webpack-plugin') //gzip压缩
 
-const SpeedMeasureWebpackPlugin = require('speed-measure-webpack-plugin') //查看打包时间
-const smp = new SpeedMeasureWebpackPlugin()
-
-const { name, version, author, email } = require('./package.json')
+const { name, version, author } = require('./package.json')
 const moment = require('moment')
 process.env.VUE_APP_NAME = name
 process.env.VUE_APP_VERSION = version
 process.env.VUE_APP_UPDATE_TIME = moment().format('YYYY/MM/DD HH:mm:ss')
 process.env.VUE_APP_AUTHOR = author
-process.env.VUE_APP_EMAIL = email
-
-function mockServer() {
-  if (process.env.NODE_ENV === 'development') {
-    return require('./mock/mockServer.js')
-  } else {
-    return ''
-  }
-}
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -27,38 +17,61 @@ function resolve(dir) {
 module.exports = {
   lintOnSave: false,
   assetsDir: 'static',
-  outputDir: 'vue-blog',
-  publicPath: '/vue-blog/',
-  // process.env.NODE_ENV === 'production' ? '/vue-blog/' : '/',
+  publicPath,
   devServer: {
-    port: 9999, // 启动端口
+    port: 10004, // 启动端口
     open: true, // 启动后是否自动打开网页
     proxy: {
-      '/dev': {
-        target: 'http://106.15.44.158:12306', // 后台接口域名
+      '/ljn': {
+        //后台本机
+        // http://10.26.150.70:8085/openprize/platform/getBatchId
+        target: 'http://10.26.150.70:8085', // 后台接口域名
         // ws: true, //如果要代理 websockets，配置这个参数
         // secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true, //是否跨域
         pathRewrite: {
-          '^/dev': '',
+          '^/ljn': '',
         },
       },
+      '/157:8087': {
+        //后台本机
+        // http://10.20.64.157:8087/openPrize-web/openprize/platform/getPrizeListByFamilyId.do
+        target: 'http://10.20.64.157:8087', // 后台接口域名
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          '^/157:8087': '/openPrize-web',
+        },
+      },
+      '/40:8087': {
+        //后台本机
+        target: 'http://10.253.101.40:8087', // 后台接口域名
+        changeOrigin: true, //是否跨域
+        pathRewrite: {
+          '^/40:8087': '/openPrize-web',
+        },
+      },
+      /*'/sit': {
+        target: 'https://light.sit.hs.net',
+        secure: false, // 如果是https接口，需要配置这个参数
+        changeOrigin: true,
+        pathRewrite: {
+          '^/sit': '',
+        },
+        headers: {
+          Referer: 'https://light.sit.hs.net',
+        },
+      },*/
     },
-    after: mockServer(),
   },
   configureWebpack() {
-    let config = {
+    return {
       resolve: {
         alias: {
           '@': path.join(__dirname, 'src'),
-          '^': path.join(__dirname, 'src/components'),
+          // components: path.join(__dirname, 'src/components'),
+          // utils: path.join(__dirname, 'src/utils'),
         },
       },
-    }
-    if (process.env.NODE_ENV === 'production') {
-      return smp.wrap(config)
-    } else {
-      return config
     }
   },
   chainWebpack(config) {
@@ -75,9 +88,6 @@ module.exports = {
       })
       .end()
     config.when(process.env.NODE_ENV === 'production', (config) => {
-      config.performance.set('hints', false)
-      //去map
-      config.devtool('none')
       // 压缩代码
       config.optimization.minimize(true)
       // 分割代码
@@ -98,6 +108,8 @@ module.exports = {
           },
         ])
         .end()
+      config.performance.set('hints', false)
+      config.devtool('none')
     })
   },
   css: {

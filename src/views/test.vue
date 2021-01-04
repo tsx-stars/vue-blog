@@ -1,41 +1,38 @@
 <template>
-  <div class="test">
-    <div
-      class="box"
-      style="
-        width: 100px;
-        margin: 100px auto;
-        background: rgba(74, 183, 189, 0.33);
-      "
-    >
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-    </div>
+  <div style="padding: 100px 0 0 100px">
+    <h-button @click="test">test</h-button>
+    <h-button @click="test2">test2</h-button>
+    <h-table :columns="columns" :data="list"></h-table>
   </div>
 </template>
-
 <script>
+import axios from 'axios'
 export default {
   name: 'test',
+  components: {},
   data() {
-    return {}
+    return {
+      columns: [
+        {
+          title: 'id',
+          key: 'id',
+        },
+        {
+          title: '名称',
+          key: 'name',
+        },
+      ],
+      list: [
+        { id: '01', name: 'q' },
+        { id: '02', name: 'w' },
+      ],
+    }
   },
-  mounted() {},
-  methods: {},
+  created() {},
+  methods: {
+    add() {
+      this.list.push({ id: '', name: '' })
+    },
+  },
 }
 </script>
-
-<style scoped lang="scss">
-.box {
-  overflow-x: auto;
-  white-space: nowrap;
-  > div {
-    display: inline-block;
-    width: 25px;
-  }
-}
-</style>

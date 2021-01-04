@@ -1,90 +1,78 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import settings from '@/settings'
+import { getQueryStr, toLogin, userCenterLogout } from '@/utils'
+import Layout from '@/layout'
+import menuList from './menuList'
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'index', //主页
-    component: () => import('../views/index'),
+    redirect: '/operate',
   },
-  {
-    path: '/test',
-    name: 'test', //测试页
-    component: () => import('../views/test'),
-  },
-  {
-    path: '/demo',
-    name: 'demo', //demo页
-    component: () => import('../views/demo'),
-  },
-  {
-    path: '/drag-select',
-    name: 'drag-select', //拖拽select
-    component: () => import('../views/drag-select.vue'),
-  },
-  {
-    path: '/dnd-list',
-    name: 'dnd-list', //拖拽列表
-    component: () => import('../views/dnd-list'),
-  },
-  {
-    path: '/login',
-    name: 'login', //登录页
-    component: () => import('../views/signIn/login'),
-  },
-  {
-    path: '/register',
-    name: 'register', //注册页
-    component: () => import('../views/signIn/register'),
-  },
-  {
-    path: '/forgetPassword',
-    name: 'forgetPassword', //忘记密码
-    component: () => import('../views/signIn/forgetPassword'),
-  },
-  {
-    path: '/home',
-    name: 'home', //首页
-    redirect: '/home/stars01',
-    component: () => import('../views/home'),
-    children: [
-      {
-        path: 'stars01',
-        name: 'stars01',
-        component: () => import('../views/stars/stars01'),
-      },
-      {
-        path: 'stars02',
-        name: 'stars02',
-        component: () => import('../views/stars/stars02'),
-      },
-      {
-        path: 'dangpi01',
-        name: 'dangpi01',
-        component: () => import('../views/dangpi/dangpi01'),
-      },
-      {
-        path: 'dangpi02',
-        name: 'dangpi02',
-        component: () => import('../views/dangpi/dangpi02'),
-      },
-      {
-        path: 'side03',
-        name: 'side03',
-        component: () => import('../views/side03'),
-      },
-      {
-        path: 'userInfo',
-        name: 'userInfo',
-        component: () => import('../views/user/userInfo'),
-      },
-    ],
-  },
+  createRoute('404', { path: '*' }),
+  createRoute('login'),
+  ...menuList.map(({ name, children }) => ({
+    name,
+    path: `/${name}`,
+    component: Layout,
+    redirect: `/${name}/${children[0].name}`,
+    children: children.map(({ name: name2 }) =>
+      createRoute(`${name}/${name2}`)
+    ),
+  })),
 ]
 
+if (process.env.NODE_ENV === 'development') {
+  routes.push(createRoute('icons'))
+  routes.push(createRoute('401'))
+  routes.push(createRoute('test'))
+}
+
 const router = new VueRouter({
+  mode: 'history',
+  base: settings.publicPath,
+  scrollBehavior: () => ({ x: 0, y: 0 }),
   routes,
 })
 
+router.beforeEach((to, from, next) => {
+  next()
+  /*let { ticket } = getQueryStr()
+  if (ticket) {
+    next()
+  } else {
+    $.getScript(window.App.userCenter + '/CASLoginAPI.do', function (e) {
+      //用户中心未登录
+      if (!window.CASLoginResEntity?.loginFlag) {
+        toLogin()
+      }
+      //自己未登录
+      else if (!sessionStorage.getItem('token')) {
+        userCenterLogout()
+      } else {
+        next()
+      }
+    })
+  }*/
+})
+
 export default router
+
+function createRoute(path, config) {
+  let tmpArr = path.split('/')
+  let name = tmpArr[tmpArr.length - 1]
+  let pathBefore = path.includes('/') ? '' : '/'
+  return {
+    path: pathBefore + name,
+    name,
+    component: (resolve) => require([`@/views/${path}`], resolve),
+    ...config,
+  }
+}

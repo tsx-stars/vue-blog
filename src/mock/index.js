@@ -1,51 +1,87 @@
-//引入mockjs
+import settings from '@/settings'
+const { startUpMock, partialImport, needMockList } = settings
+
 const Mock = require('mockjs')
-// 获取 mock.Random 对象
-const Random = Mock.Random
-//使用mockjs模拟数据
-/*Mock.mock(/^[/dev/t1]/, 'get', (req) => {
-  //当post或get请求到/api/data路由时Mock会拦截请求并返回上面的数据
-  let list = []
-  for (let i = 0; i < 30; i++) {
-    let listObject = {
-      title: Random.csentence(5, 10), //随机生成一段中文文本。
-      company: Random.csentence(5, 10),
-      attention_degree: Random.integer(100, 9999), //返回一个随机的整数。
-      photo: Random.image('114x83', '#00405d', '#FFF', 'Mock.js'),
+
+// 设置拦截ajax请求的相应时间
+Mock.setup({
+  timeout: '200-600',
+})
+
+let configArray = []
+
+// 使用webpack的require.context()遍历所有mock文件
+const files = require.context('.', true, /\.js$/)
+
+//mock名称列表
+let mockArr = files.keys()
+
+//mock过滤
+const reg = /\.\/(.*)\.js/
+mockArr = mockArr.filter((key) => {
+  let tmp = key.match(reg)[1]
+  return (
+    startUpMock &&
+    key !== './index.js' &&
+    files(key).default &&
+    (needMockList.includes(tmp) || !partialImport)
+  )
+})
+
+mockArr.forEach((key) => {
+  configArray.push(files(key).default)
+})
+
+// 注册所有的mock服务
+configArray.forEach((item) => {
+  for (let [path, target] of Object.entries(item)) {
+    if (path.includes('|')) {
+      let protocol = path.split('|')
+      // Mock.mock(new RegExp('^' + protocol[1]), protocol[0], target)
+      Mock.mock(
+        new RegExp(protocol[1]),
+        protocol[0],
+        XHR2ExpressReqWrap(target)
+      )
+    } else {
+      Mock.mock(new RegExp(path), XHR2ExpressReqWrap(target))
     }
-    list.push(listObject)
-  }
-  return {
-    data: list,
-  }
-})*/
-Mock.mock(/\/dev\/drag-select$/, 'post', (req) => {
-  //当post或get请求到/api/data路由时Mock会拦截请求并返回上面的数据
-  let list = []
-  for (let i = 0; i < 30; i++) {
-    let listObject = {
-      value: Random.csentence(4, 8), //随机生成一段中文文本。
-      label: Random.csentence(4, 8), //随机生成一段中文文本。
-    }
-    list.push(listObject)
-  }
-  return {
-    data: list,
   }
 })
 
-Mock.mock(/\/dev\/dnd-list$/, 'post', (req) => {
-  //当post或get请求到/api/data路由时Mock会拦截请求并返回上面的数据
-  let list = []
-  for (let i = 0; i < 20; i++) {
-    let listObject = {
-      id: i, //随机生成一段中文文本。
-      title: Random.csentence(5, 10), //随机生成一段中文文本。
-      author: Random.csentence(5, 10),
+//处理参数
+function XHR2ExpressReqWrap(respond) {
+  return function (options) {
+    let result = null
+    if (respond instanceof Function) {
+      const { body, type, url } = options
+      result = respond({
+        method: type,
+        body: JSON.parse(body),
+        query: param2Obj(url),
+      })
+    } else {
+      result = respond
     }
-    list.push(listObject)
+    return Mock.mock(result)
   }
-  return {
-    data: list,
+}
+
+//get请求处理查询字符串
+function param2Obj(url) {
+  const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
+  if (!search) {
+    return {}
   }
-})
+  const obj = {}
+  const searchArr = search.split('&')
+  searchArr.forEach((v) => {
+    const index = v.indexOf('=')
+    if (index !== -1) {
+      const name = v.substring(0, index)
+      const val = v.substring(index + 1, v.length)
+      obj[name] = val
+    }
+  })
+  return obj
+}

@@ -1,2 +1,5 @@
-window.baseURL = 'http://blog.ilikebug.com:12306'
-// window.baseURL = 'http://127.0.0.1:12306'
+window.App = {
+  // userCenter: 'http://10.20.35.77:8080/iuccasserver', //用户中心登陆
+  userCenter: 'https://uicuat.hundsun.cn/iuccasserver', //用户中心登陆
+  hsUrl: 'https://www.sit.hs.net',
+}

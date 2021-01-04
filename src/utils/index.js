@@ -1,19 +1,15 @@
-export {
-  formatDate, //日期格式转换
-  deepCopy, //深度克隆
-  paramObj, //将url请求参数转为json格式
-  exportCsv, //前端根据二维数组导出csv表格
-}
+import router from '@/router'
+import store from '@/store'
+import settings from '@/settings'
 
-function formatDate(date, fmt = 'yyyy-MM-dd') {
-  if (!date) {
-    return date
-  }
-  if (typeof date === 'number') {
+//日期格式转换
+export function formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
+  if (!date) return date
+  let tmp = Number(date)
+  if (isNaN(tmp)) {
     date = new Date(date)
-  }
-  if (typeof date === 'string') {
-    date = new Date(Number(date))
+  } else {
+    date = new Date(tmp)
   }
   let o = {
     'M+': date.getMonth() + 1, //月份
@@ -38,15 +34,19 @@ function formatDate(date, fmt = 'yyyy-MM-dd') {
   return fmt
 }
 
-function deepCopy(obj, cache = []) {
+//深度克隆
+export function deepCopy(obj, cache = []) {
+  // typeof {} => 'object'
   if (obj === null || typeof obj !== 'object') {
     return obj
   }
+  // 如果传入的对象与缓存的相等, 则递归结束, 这样防止循环
   const hit = cache.filter((c) => c.original === obj)[0]
   if (hit) {
     return hit.copy
   }
   const copy = Array.isArray(obj) ? [] : {}
+  // 将copy首先放入cache, 因为我们需要在递归deepCopy的时候引用它
   cache.push({
     original: obj,
     copy,
@@ -57,29 +57,63 @@ function deepCopy(obj, cache = []) {
   return copy
 }
 
-function paramObj(url) {
-  const search = url.split('?')[1]
+//处理查询字符串
+export function getQueryStr(url = location.href) {
+  const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
   if (!search) {
     return {}
   }
-  return JSON.parse(
-    '{"' +
-      decodeURIComponent(search)
-        .replace(/"/g, '\\"')
-        .replace(/&/g, '","')
-        .replace(/=/g, '":"')
-        .replace(/\+/g, ' ') +
-      '"}'
-  )
+  const obj = {}
+  const searchArr = search.split('&')
+  searchArr.forEach((v) => {
+    const index = v.indexOf('=')
+    if (index !== -1) {
+      const name = v.substring(0, index)
+      const val = v.substring(index + 1, v.length)
+      obj[name] = val
+    }
+  })
+  return obj
 }
 
-function exportCsv(arr) {
-  let csvContent =
-    'data:text/csv;charset=utf-8,' + arr.map((e) => e.join(',')).join('\n')
-  let encodedUri = encodeURI(csvContent)
-  let link = document.createElement('a')
-  link.setAttribute('href', encodedUri)
-  link.setAttribute('download', 'my_data.csv')
-  link.click()
-  link = null
+//金额转换
+export function moneyFormat(val, extra = '￥') {
+  if (val === null || val === undefined || val === '') {
+    return val
+  }
+  let tmp
+  let num = Number(val)
+  if (isNaN(num)) {
+    tmp = ''
+  } else {
+    if (extra === '￥') {
+      tmp = '￥' + num.toFixed(2)
+    } else if (extra === '元') {
+      tmp = num.toFixed(2) + '元'
+    } else if (extra === '') {
+      tmp = num.toFixed(2)
+    }
+  }
+  return tmp
+}
+
+//路由跳转
+export function jump(name, query) {
+  router.push({
+    name,
+    query,
+  })
+}
+
+//去登录
+export function toLogin() {
+  sessionStorage.clear()
+  location.href = `${window.App.userCenter}/login?service=${location.origin}${settings.publicPath}/login`
+}
+
+//退出用户中心
+export function userCenterLogout() {
+  let user_id = store.state.login.userInfo.authId
+  sessionStorage.clear()
+  location.href = `${window.App.userCenter}/logout?user_id=${user_id}&service=${location.origin}${settings.publicPath}/login`
 }

@@ -1,4 +1,2 @@
-const getters = {
-  // appId: state => state.login.appId
-}
+const getters = {}
 export default getters
