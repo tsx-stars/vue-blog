@@ -18,17 +18,18 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
-    "core-js": "^3.8.1",
-    "vue": "^2.6.12",
-    "vue-router": "^3.4.9",
-    "vuex": "^3.6.0",
     "axios": "^0.21.1",
-    "qs": "^6.9.4",
+    "clipboard": "^2.0.6",
+    "core-js": "^3.8.1",
+    "element-ui": "^2.14.1",
+    "fingerprintjs": "^0.5.3",
     "h_ui": "^1.10.0",
     "mockjs": "^1.1.0",
     "moment": "^2.29.1",
-    "fingerprintjs": "^0.5.3",
-    "clipboard": "^2.0.6"
+    "qs": "^6.9.4",
+    "vue": "^2.6.12",
+    "vue-router": "^3.4.9",
+    "vuex": "^3.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.9",

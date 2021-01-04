@@ -6,6 +6,6 @@ import './hui'
 import '../icons'
 
 if (process.env.NODE_ENV === 'development') {
+  require('../mock')
   window.vm = new Vue()
-  // require('../mock')
 }

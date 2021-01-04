@@ -1,11 +1,10 @@
-<!--客户账单数据-->
 <template>
-  <div>客户账单数据</div>
+  <div>用户信息</div>
 </template>
 
 <script>
 export default {
-  name: 'customer-bill',
+  name: 'user-info',
 }
 </script>
 

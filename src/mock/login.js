@@ -1,4 +1,4 @@
-let obj = {
+export default {
   //登录
   'post|login': {
     errcode: 0,
@@ -20,4 +20,3 @@ let obj = {
   //登出
   logout: null,
 }
-export default obj

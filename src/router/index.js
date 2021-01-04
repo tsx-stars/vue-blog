@@ -1,22 +1,28 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import settings from '@/settings'
-import { getQueryStr, toLogin, userCenterLogout } from '@/utils'
+import Router from 'vue-router'
 import Layout from '@/layout'
 import menuList from './menuList'
 
-const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err)
+//push
+const VueRouterPush = Router.prototype.push
+Router.prototype.push = function push(to) {
+  return VueRouterPush.call(this, to).catch((err) => err)
 }
-Vue.use(VueRouter)
+//replace
+const VueRouterReplace = Router.prototype.replace
+Router.prototype.replace = function replace(to) {
+  return VueRouterReplace.call(this, to).catch((err) => err)
+}
+Vue.use(Router)
 
 const routes = [
   {
     path: '/',
-    redirect: '/operate',
+    component: () => import('../views/index'),
+    // redirect: '',
   },
   createRoute('404', { path: '*' }),
+  createRoute('home'),
   createRoute('login'),
   ...menuList.map(({ name, children }) => ({
     name,
@@ -35,32 +41,14 @@ if (process.env.NODE_ENV === 'development') {
   routes.push(createRoute('test'))
 }
 
-const router = new VueRouter({
+const router = new Router({
   mode: 'history',
-  base: settings.publicPath,
   scrollBehavior: () => ({ x: 0, y: 0 }),
   routes,
 })
 
 router.beforeEach((to, from, next) => {
   next()
-  /*let { ticket } = getQueryStr()
-  if (ticket) {
-    next()
-  } else {
-    $.getScript(window.App.userCenter + '/CASLoginAPI.do', function (e) {
-      //用户中心未登录
-      if (!window.CASLoginResEntity?.loginFlag) {
-        toLogin()
-      }
-      //自己未登录
-      else if (!sessionStorage.getItem('token')) {
-        userCenterLogout()
-      } else {
-        next()
-      }
-    })
-  }*/
 })
 
 export default router

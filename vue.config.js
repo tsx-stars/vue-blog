@@ -1,6 +1,5 @@
 const path = require('path')
 const settings = require('./src/settings.js')
-const { publicPath } = settings
 const CompressionWebpackPlugin = require('compression-webpack-plugin') //gzip压缩
 
 const { name, version, author } = require('./package.json')
@@ -17,50 +16,19 @@ function resolve(dir) {
 module.exports = {
   lintOnSave: false,
   assetsDir: 'static',
-  publicPath,
   devServer: {
-    port: 10004, // 启动端口
+    port: 9900, // 启动端口
     open: true, // 启动后是否自动打开网页
     proxy: {
-      '/ljn': {
-        //后台本机
-        // http://10.26.150.70:8085/openprize/platform/getBatchId
-        target: 'http://10.26.150.70:8085', // 后台接口域名
+      '/my': {
+        target: 'http://106.15.44.158:8080', // 后台接口域名
         // ws: true, //如果要代理 websockets，配置这个参数
         // secure: false,  // 如果是https接口，需要配置这个参数
         changeOrigin: true, //是否跨域
         pathRewrite: {
-          '^/ljn': '',
+          '^/my': '',
         },
       },
-      '/157:8087': {
-        //后台本机
-        // http://10.20.64.157:8087/openPrize-web/openprize/platform/getPrizeListByFamilyId.do
-        target: 'http://10.20.64.157:8087', // 后台接口域名
-        changeOrigin: true, //是否跨域
-        pathRewrite: {
-          '^/157:8087': '/openPrize-web',
-        },
-      },
-      '/40:8087': {
-        //后台本机
-        target: 'http://10.253.101.40:8087', // 后台接口域名
-        changeOrigin: true, //是否跨域
-        pathRewrite: {
-          '^/40:8087': '/openPrize-web',
-        },
-      },
-      /*'/sit': {
-        target: 'https://light.sit.hs.net',
-        secure: false, // 如果是https接口，需要配置这个参数
-        changeOrigin: true,
-        pathRewrite: {
-          '^/sit': '',
-        },
-        headers: {
-          Referer: 'https://light.sit.hs.net',
-        },
-      },*/
     },
   },
   configureWebpack() {
@@ -68,7 +36,6 @@ module.exports = {
       resolve: {
         alias: {
           '@': path.join(__dirname, 'src'),
-          // components: path.join(__dirname, 'src/components'),
           // utils: path.join(__dirname, 'src/utils'),
         },
       },

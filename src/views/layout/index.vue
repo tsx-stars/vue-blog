@@ -1,8 +1,8 @@
 <template>
   <div>
-    <SmsHead />
+    <s-head />
     <div class="content min-h">
-      <SmsSide class="side min-h" />
+      <s-side class="side min-h" />
       <router-view class="main" />
     </div>
   </div>
@@ -12,8 +12,8 @@
 export default {
   name: 'layout',
   components: {
-    SmsHead: () => import('./SmsHead'),
-    SmsSide: () => import('./SmsSide'),
+    SHead: () => import('./SHead'),
+    SSide: () => import('./SSide'),
   },
   methods: {},
 }

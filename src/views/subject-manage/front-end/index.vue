@@ -1,11 +1,10 @@
-<!--供应商账单-->
 <template>
-  <div>供应商账单</div>
+  <div>前端</div>
 </template>
 
 <script>
 export default {
-  name: 'supplier-bill',
+  name: 'front-end',
 }
 </script>
 

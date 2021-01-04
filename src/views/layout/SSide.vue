@@ -26,7 +26,7 @@
 <script>
 import menuList from '@/router/menuList'
 export default {
-  name: 'SmsMenu',
+  name: 'SSide',
   data() {
     return {
       menuList,

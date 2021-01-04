@@ -76,44 +76,10 @@ export function getQueryStr(url = location.href) {
   return obj
 }
 
-//金额转换
-export function moneyFormat(val, extra = '￥') {
-  if (val === null || val === undefined || val === '') {
-    return val
-  }
-  let tmp
-  let num = Number(val)
-  if (isNaN(num)) {
-    tmp = ''
-  } else {
-    if (extra === '￥') {
-      tmp = '￥' + num.toFixed(2)
-    } else if (extra === '元') {
-      tmp = num.toFixed(2) + '元'
-    } else if (extra === '') {
-      tmp = num.toFixed(2)
-    }
-  }
-  return tmp
-}
-
 //路由跳转
 export function jump(name, query) {
   router.push({
     name,
     query,
   })
-}
-
-//去登录
-export function toLogin() {
-  sessionStorage.clear()
-  location.href = `${window.App.userCenter}/login?service=${location.origin}${settings.publicPath}/login`
-}
-
-//退出用户中心
-export function userCenterLogout() {
-  let user_id = store.state.login.userInfo.authId
-  sessionStorage.clear()
-  location.href = `${window.App.userCenter}/logout?user_id=${user_id}&service=${location.origin}${settings.publicPath}/login`
 }

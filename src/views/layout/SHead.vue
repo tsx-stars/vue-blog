@@ -2,11 +2,10 @@
   <div class="prize-headder clearfix">
     <div class="prize-headder-cen">
       <div class="fl">
-        <a class="gtn-logo" :href="hsUrl"></a>
-        <a class="prize-title nav nav-l" href="javascript:">短信平台</a>
+        <a class="prize-title nav nav-l" href="javascript:">题库平台</a>
       </div>
       <div class="fr">
-        <!--<a @click="toLogin" class="nav" href="javascript:">登录</a>-->
+        <a @click="login" class="nav" href="javascript:">登录</a>
         <a class="nav" href="javascript:">{{ userInfo.mobile }}</a>
         <a @click="logout" class="nav" href="javascript:">退出</a>
         <a
@@ -21,26 +20,17 @@
 
 <script>
 import { mapState } from 'vuex'
-import { toLogin, userCenterLogout } from '@/utils'
 export default {
-  name: 'PrizeHeadder',
+  name: 'SHead',
   data() {
-    return {
-      hsUrl: window.App.hsUrl,
-      toLogin,
-    }
+    return {}
   },
   computed: {
     ...mapState('login', ['userInfo']),
   },
   methods: {
-    logout() {
-      //自己的登出
-      this.$xhr
-        .post('logout', null, { tips: false })
-        .then(() => {})
-        .finally(userCenterLogout)
-    },
+    login() {},
+    logout() {},
   },
 }
 </script>

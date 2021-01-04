@@ -1,11 +1,10 @@
-<!--短信发送数据-->
 <template>
-  <div>短信发送数据</div>
+  <div>后端</div>
 </template>
 
 <script>
 export default {
-  name: 'sms-send',
+  name: 'back-end',
 }
 </script>
 

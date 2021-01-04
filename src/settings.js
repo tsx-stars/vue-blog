@@ -1,6 +1,4 @@
 module.exports = {
-  //部署在二级目录路径
-  publicPath: '',
   // 代理
   // proxy: '/ljn',
   proxy: '/157:8087',
