@@ -8,6 +8,11 @@ export function formatDate(date, fmt = 'yyyy-MM-dd hh:mm:ss') {
   let tmp = Number(date)
   if (isNaN(tmp)) {
     date = new Date(date)
+  } else if (tmp.length === 8) {
+    tmp += ''
+    date = new Date(
+      tmp.slice(0, 4) + '-' + tmp.slice(4, 6) + '-' + tmp.slice(6, 8)
+    )
   } else {
     date = new Date(tmp)
   }
