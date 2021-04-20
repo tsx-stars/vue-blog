@@ -8,7 +8,7 @@ module.exports = {
       plugins: ['dynamic-import-node'],
     },
     production: {
-      plugins: ['transform-remove-console'],
+      // plugins: ['transform-remove-console'],
     },
   },
 }

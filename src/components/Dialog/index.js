@@ -3,10 +3,10 @@ import Toast from './Dialog.vue'
 
 const ToastCtor = Vue.extend(Toast)
 
-const InitToast = opt => {
+const InitToast = (opt) => {
   const duration = opt.autoClose !== false && (opt.duration || 2000)
   let i = new ToastCtor({
-    data: opt
+    data: opt,
   }).$mount()
 
   document.body.appendChild(i.$el)
@@ -17,20 +17,20 @@ const InitToast = opt => {
     }, duration)
 }
 
-const toast = opt => {
+const toast = (opt) => {
   return InitToast(opt)
 }
-const alert = opt => {
+const alert = (opt) => {
   return InitToast({
     ...opt,
     isAlert: true,
-    autoClose: false
+    autoClose: false,
   })
 }
-const confirm = opt => {
+const confirm = (opt) => {
   return InitToast({
     ...opt,
-    autoClose: false
+    autoClose: false,
   })
 }
 

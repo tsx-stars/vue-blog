@@ -1,5 +1,4 @@
 const path = require('path')
-const settings = require('./src/settings.js')
 const CompressionWebpackPlugin = require('compression-webpack-plugin') //gzip压缩
 
 const { name, version, author } = require('./package.json')
@@ -29,6 +28,13 @@ module.exports = {
           '^/my': '',
         },
       },
+      '/zsk': {
+        target: 'https://itsm2016.hundsun.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/zsk': '',
+        },
+      },
     },
   },
   configureWebpack() {
@@ -55,12 +61,6 @@ module.exports = {
       })
       .end()
     config.when(process.env.NODE_ENV === 'production', (config) => {
-      // 压缩代码
-      config.optimization.minimize(true)
-      // 分割代码
-      config.optimization.splitChunks({
-        chunks: 'all',
-      })
       //gzip压缩
       config
         .plugin('compression')
@@ -75,8 +75,8 @@ module.exports = {
           },
         ])
         .end()
-      config.performance.set('hints', false)
-      config.devtool('none')
+      // config.performance.set('hints', false)
+      // config.devtool('none')
     })
   },
   css: {

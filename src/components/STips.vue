@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'Stips',
+  name: 'STips',
 }
 </script>
 

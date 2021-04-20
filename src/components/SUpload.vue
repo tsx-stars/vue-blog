@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: 'sUpload',
+  name: 'SUpload',
   props: {
     //上传文件类型
     accept: {

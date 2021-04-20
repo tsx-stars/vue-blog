@@ -81,9 +81,10 @@ export function getQueryStr(url = location.href) {
 }
 
 //路由跳转
-export function jump(name, query) {
+export function jump(name, query, config) {
   router.push({
     name,
     query,
+    ...config,
   })
 }

@@ -15,7 +15,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 export default {
-  name: 'ImgSee',
+  name: 'SImgSee',
   data() {
     return {}
   },

@@ -86,7 +86,6 @@ export default {
   width: 150px;
   height: 60px;
   display: inline-block;
-  background: url(../assets/gtn-logo-yun.png) center center no-repeat;
   vertical-align: middle;
 }
 .prize-title {

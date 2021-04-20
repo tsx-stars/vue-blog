@@ -41,7 +41,7 @@
 import BaseButton from '../BaseButton'
 export default {
   components: { BaseButton },
-  data () {
+  data() {
     return {
       text: '',
       duration: 2000,
@@ -51,36 +51,36 @@ export default {
       showBtn: true,
       showCancelBtn: true,
       confirmText: '确定',
-      cancelText: '取消'
+      cancelText: '取消',
     }
   },
 
-  created () {
+  created() {
     this.closeToast()
   },
   methods: {
-    closer () {
+    closer() {
       this.showDialog = false
     },
-    closeToast () {
+    closeToast() {
       this.autoClose &&
         setTimeout(() => {
           this.closer()
         }, this.duration)
     },
-    clickBG () {
+    clickBG() {
       if (this.autoClose) return
       this.showDialog = false
     },
-    cancelClick () {
+    cancelClick() {
       this.showDialog = false
       this.handleCancel && this.handleCancel()
     },
-    confirmClick () {
+    confirmClick() {
       this.showDialog = false
       this.handleConfirm && this.handleConfirm()
-    }
-  }
+    },
+  },
 }
 </script>
 
