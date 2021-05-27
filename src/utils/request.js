@@ -118,12 +118,6 @@ let xhr = (
   } = {}
   //responseType:'blob' //下载
 ) => {
-  if (url.includes('|')) {
-    url = url.replace(/.*\|/, '')
-  } else if (!url.includes('http')) {
-    url = 'openprize/platform/' + url + '.do'
-  }
-
   let data = method.toLocaleLowerCase() === 'get' ? 'params' : 'data'
   return service({
     method,

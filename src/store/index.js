@@ -15,21 +15,7 @@ Object.keys(modules).forEach((key) => {
 const store = new Vuex.Store({
   modules,
   getters,
-  state: {
-    imgBox: false, //查看图片
-    imgUrl: '', //图片地址
-  },
-  mutations: {
-    //打开图片弹窗
-    openImgBox: (state, imgUrl = '') => {
-      state.imgUrl = imgUrl
-      state.imgBox = true
-    },
-    //关闭图片弹窗
-    closeImgBox: (state) => {
-      state.imgUrl = ''
-      state.imgBox = false
-    },
-  },
+  state: {},
+  mutations: {},
 })
 export default store

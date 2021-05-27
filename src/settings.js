@@ -11,7 +11,4 @@ module.exports = {
     //需要按需导入的mock,开启partialImport后生效
     // '',
   ],
-
-  //开发模式(部分权限不控制,)
-  debugger: false,
 }
