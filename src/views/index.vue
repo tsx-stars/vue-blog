@@ -3,9 +3,16 @@
     主页
     <ElButton @click="$jump('home')">去home页</ElButton>
     <el-button @click="$jump('login')">登录</el-button>
+    <div>张尚峰</div>
     <!--    <svg-icon style="font-size: 20px;" iconClass="edit" />-->
     <svg-icon style="font-size: 20px;" icon-class="chart" />
     <svg-icon icon-class="edit" />
+    <h-date-picker
+      type="date"
+      v-model="date"
+      placeholder="选择日期"
+      style="width: 200px;"
+    ></h-date-picker>
     <div
       class="test"
       style="
@@ -26,7 +33,9 @@ import axios from 'axios'
 export default {
   name: 'index',
   data() {
-    return {}
+    return {
+      date: new Date(),
+    }
   },
   mounted() {
     axios

@@ -22,7 +22,11 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 
-require('./mock/index')
+import hui from 'h_ui'
+import 'h_ui/dist/h_ui.min.css' // 使用 CSS
+Vue.use(hui)
+
+// require('./mock/index')
 
 //路由跳转
 Vue.prototype.$jump = (name, query) => {

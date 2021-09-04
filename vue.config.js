@@ -24,10 +24,9 @@ module.exports = {
   lintOnSave: false,
   assetsDir: 'static',
   outputDir: 'vue-blog',
-  publicPath: '/vue-blog/',
   // process.env.NODE_ENV === 'production' ? '/vue-blog/' : '/',
   devServer: {
-    port: 9999, // 启动端口
+    port: 9901, // 启动端口
     open: true, // 启动后是否自动打开网页
     proxy: {
       '/dev': {
